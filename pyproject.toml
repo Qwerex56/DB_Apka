@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "db-apka"
+version = "0.0.1"
+description = "Client app to measure car mileage"
+authors = ["Adrian Czubaty <adriancz.prywatny@gmail.com>"]
+license = "Open"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
