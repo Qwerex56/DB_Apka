@@ -1,4 +1,5 @@
-﻿import sqlite3
+﻿from datetime import datetime
+import sqlite3
 
 
 def add_client(conn: sqlite3.Connection, cur: sqlite3.Cursor):
@@ -57,7 +58,8 @@ def add_car(conn: sqlite3.Connection, cur: sqlite3.Cursor):
         service_date = input("Podaj datę serwisu (DD-MM-YYYY): ")
         try:
             datetime.strptime(service_date, '%d-%m-%Y')
-        except value_err:
+            break
+        except:
             print("Niepoprawny format daty. Powinien być DD-MM-YYYY.")
     service_place = input("Podaj miejsce serwisu: ")
     cur.execute("INSERT INTO Car VALUES (?, ?, ?, ?, ?, ?)", (car_id,
