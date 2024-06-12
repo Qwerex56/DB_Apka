@@ -53,7 +53,12 @@ def add_car(conn: sqlite3.Connection, cur: sqlite3.Cursor):
             break
         else:
             print("Przebieg powinien być liczbą.")
-    service_date = input("Podaj datę serwisu (YYYY-MM-DD): ")
+    while True:
+        service_date = input("Podaj datę serwisu (DD-MM-YYYY): ")
+        try:
+            datetime.strptime(service_date, '%d-%m-%Y')
+        except value_err:
+            print("Niepoprawny format daty. Powinien być DD-MM-YYYY.")
     service_place = input("Podaj miejsce serwisu: ")
     cur.execute("INSERT INTO Car VALUES (?, ?, ?, ?, ?, ?)", (car_id,
                                                               client_id,
