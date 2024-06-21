@@ -4,12 +4,6 @@ import sqlite3
 
 def add_client(conn: sqlite3.Connection, cur: sqlite3.Cursor):
     while True:
-        client_id = input("Podaj ID klienta: ")
-        if client_id.isdigit():
-            break
-        else:
-            print("ID klienta powinno być liczbą.")
-    while True:
         client_name = input("Podaj imię klienta: ")
         if client_name.isalpha():
             break
@@ -27,10 +21,9 @@ def add_client(conn: sqlite3.Connection, cur: sqlite3.Cursor):
             break
         else:
             print("PESEL powinien składać się z 11 cyfr.")
-    cur.execute("INSERT INTO Client VALUES (?, ?, ?, ?)", (client_id,
-                                                           client_name,
-                                                           client_surname,
-                                                           client_pid))
+    cur.execute("INSERT INTO Client VALUES (?, ?, ?)", (client_pid,
+                                                        client_name,
+                                                        client_surname))
     conn.commit()
 
 
@@ -42,7 +35,7 @@ def add_car(conn: sqlite3.Connection, cur: sqlite3.Cursor):
         else:
             print("ID samochodu powinno być liczbą.")
     while True:
-        client_id = input("Podaj ID klienta: ")
+        client_id = input("Podaj pesel klienta: ")
         if client_id.isdigit():
             break
         else:

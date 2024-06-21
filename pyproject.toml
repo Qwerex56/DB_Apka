@@ -10,6 +10,7 @@ readme = "README.md"
 python = "^3.12"
 simplejson = "^3.19.2"
 sqlalchemy = "^2.0.30"
+psycopg = "^3.1.19"
 
 
 [build-system]
