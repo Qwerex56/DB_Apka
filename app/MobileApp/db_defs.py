@@ -3,6 +3,14 @@ import sqlite3
 
 
 def add_client(conn: sqlite3.Connection, cur: sqlite3.Cursor):
+    """
+    Dodaje nowego klienta do tabeli 'Client' w bazie danych.
+
+    :param conn: Połączenie z bazą danych.
+    :type conn: sqlite3.Connection
+    :param cur: Kursor do bazy danych.
+    :type cur: sqlite3.Cursor
+    """
     while True:
         client_name = input("Podaj imię klienta: ")
         if client_name.isalpha():
@@ -21,6 +29,8 @@ def add_client(conn: sqlite3.Connection, cur: sqlite3.Cursor):
             break
         else:
             print("PESEL powinien składać się z 11 cyfr.")
+            
+    # Wstaw nowego klienta do tabeli 'Client'
     cur.execute("INSERT INTO Client VALUES (?, ?, ?)", (client_pid,
                                                         client_name,
                                                         client_surname))
@@ -28,6 +38,9 @@ def add_client(conn: sqlite3.Connection, cur: sqlite3.Cursor):
 
 
 def add_car(conn: sqlite3.Connection, cur: sqlite3.Cursor):
+    """
+    Dodaje nowy samochód do tabeli 'Car' w bazie danych.
+    """
     while True:
         car_id = input("Podaj ID samochodu: ")
         if car_id.isdigit():
@@ -55,6 +68,8 @@ def add_car(conn: sqlite3.Connection, cur: sqlite3.Cursor):
         except:
             print("Niepoprawny format daty. Powinien być DD-MM-YYYY.")
     service_place = input("Podaj miejsce serwisu: ")
+    
+    # Wstaw nowy samochód do tabeli 'Car'
     cur.execute("INSERT INTO Car VALUES (?, ?, ?, ?, ?, ?)", (car_id,
                                                               client_id,
                                                               brand,

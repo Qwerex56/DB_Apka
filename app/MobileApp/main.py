@@ -2,9 +2,11 @@ import sqlite3
 import db_defs
 import export_to_csv
 
+# Nawiąż połączenie z bazą danych
 conn = sqlite3.connect('CarMileage.db')
 cur = conn.cursor()
 
+# Utwórz tabelę 'Client', jeśli nie istnieje
 cur.execute("""
     CREATE TABLE IF NOT EXISTS Client(
         clientId INTEGER,
@@ -14,6 +16,7 @@ cur.execute("""
     );
 """)
 
+# Utwórz tabelę 'Car', jeśli nie istnieje
 cur.execute("""
     CREATE TABLE IF NOT EXISTS Car(
         carId INTEGER,
@@ -34,10 +37,13 @@ while True:
     choice = input("Wybierz opcję: ")
 
     if choice == '1':
+        # Dodaj klienta
         db_defs.add_client(conn, cur)
     elif choice == '2':
+        # Dodaj samochód
         db_defs.add_car(conn, cur)
     elif choice == '3':
+        # Wyeksportuj dane do pliku CSV
         export_to_csv.export_to_csv('dbAsCsv', cur)
     elif choice == '4':
         break
@@ -48,6 +54,7 @@ while True:
         choice = input("Wybierz opcje: ")
 
         if choice == '1':
+            # Usuń wszystkie dane z tabeli 'Client' i 'Car'
             cur.execute("""DELETE FROM Client""")
             cur.execute("""DELETE FROM Car""")
             conn.commit()

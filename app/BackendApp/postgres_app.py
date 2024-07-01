@@ -7,6 +7,12 @@ import simplejson
 
 
 def initialize_car_service_db(conn_data):
+    """
+    Inicjalizuje bazę danych dla serwisu samochodowego, tworząc tabele 'Client' i 'Car'.
+
+    :param conn_data: Słownik zawierający dane połączenia z bazą (host, port, user, dbname, password).
+    :type conn_data: dict
+    """
     conn = psycopg.connect(
         host=conn_data['host'],
         port=conn_data['port'],
@@ -16,6 +22,7 @@ def initialize_car_service_db(conn_data):
     )
     cur = conn.cursor()
 
+    # Utwórz tabelę 'Client'
     cur.execute("""
         CREATE TABLE IF NOT EXISTS Client (
             clientId SERIAL PRIMARY KEY,
@@ -25,6 +32,7 @@ def initialize_car_service_db(conn_data):
         );
     """)
 
+    # Utwórz tabelę 'Car' z kluczem obcym do tabeli 'Client'
     cur.execute("""
         CREATE TABLE IF NOT EXISTS Car (
             carId SERIAL PRIMARY KEY,
@@ -43,6 +51,12 @@ def initialize_car_service_db(conn_data):
 
 
 def generate_random_data_client(conn_data):
+    """
+    Generuje losowe dane dotyczące klientów i wstawia je do tabeli 'Client' w bazie danych.
+
+    :param conn_data: Słownik zawierający dane połączenia z bazą (host, port, user, dbname, password).
+    :type conn_data: dict
+    """
     conn = psycopg.connect(
         host=conn_data['host'],
         port=conn_data['port'],
@@ -52,6 +66,7 @@ def generate_random_data_client(conn_data):
     )
     cur = conn.cursor()
 
+    # Lista imion i nazwisk klientów
     names = ["Aleksander", "Kacper", "Patryk", "Bartosz", "Maciej"]
     surnames = ["Wiśniewski", "Wójcik", "Kowalczyk", "Kamiński", "Lewandowski"]
 
@@ -60,6 +75,7 @@ def generate_random_data_client(conn_data):
         rand_surname = random.choice(surnames)
         rand_pid = '12345678900'
 
+        # Wstaw dane do tabeli 'Client'
         cur.execute("""
             INSERT INTO Client (clientName, clientSurname, clientPid)
                 VALUES (%s, %s, %s);
@@ -72,6 +88,12 @@ def generate_random_data_client(conn_data):
 
 
 def generate_random_data_car(conn_data):
+    """
+    Generuje losowe dane dotyczące samochodów i wstawia je do tabeli 'Car' w bazie danych.
+
+    :param conn_data: Słownik zawierający dane połączenia z bazą (host, port, user, dbname, password).
+    :type conn_data: dict
+    """
     conn = psycopg.connect(
         host=conn_data['host'],
         port=conn_data['port'],
@@ -81,9 +103,11 @@ def generate_random_data_car(conn_data):
     )
     cur = conn.cursor()
 
+    # Pobierz pierwszy i ostatni indeks klienta
     first_index = cur.execute("""SELECT clientId FROM Client""").fetchall()[0][0]
     last_index = cur.execute("""SELECT clientId FROM Client""").fetchall()[-1][0]
 
+    # Lista marek samochodów i miejsc serwisowania
     car_brands = ["Audi", "BMW", "Ferrari", "Ford", "McLaren"]
     car_services = ["Wave Motors", "Magnate Automotive", "Phoenix Motors", "Business Streamline", "Apollo Automotive"]
     car_services_place = ["Nowa Ruda", "Waldenburg", "Wrocław", "Kłodzko", "Lisia"]
@@ -95,6 +119,7 @@ def generate_random_data_car(conn_data):
         rand_service_date = datetime.date.today()
         rand_place = random.choice(car_services_place)
 
+        # Wstaw dane do tabeli 'Car'
         cur.execute("""
             INSERT INTO Car (clientId, brand, mileage, serviceDate, servicePlace)
                 VALUES (%s, %s, %s, %s, %s);
@@ -107,6 +132,12 @@ def generate_random_data_car(conn_data):
 
 
 def delete_from_database_clients(conn_data):
+    """
+    Usuwa wszystkie rekordy z tabeli 'Client' w bazie danych.
+
+    :param conn_data: Słownik zawierający dane połączenia z bazą (host, port, user, dbname, password).
+    :type conn_data: dict
+    """
     conn = psycopg.connect(
         host=conn_data['host'],
         port=conn_data['port'],
@@ -116,6 +147,7 @@ def delete_from_database_clients(conn_data):
     )
     cur = conn.cursor()
 
+    # Usuń rekordy z tabeli 'Client'
     cur.execute("""
         DELETE * FROM Client;
     """)
@@ -127,6 +159,12 @@ def delete_from_database_clients(conn_data):
 
 
 def delete_from_database_cars(conn_data):
+    """
+   Usuwa wszystkie rekordy z tabeli 'Car' w bazie danych.
+
+   :param conn_data: Słownik zawierający dane połączenia z bazą (host, port, user, dbname, password).
+   :type conn_data: dict
+   """
     conn = psycopg.connect(
         host=conn_data['host'],
         port=conn_data['port'],
@@ -136,6 +174,7 @@ def delete_from_database_cars(conn_data):
     )
     cur = conn.cursor()
 
+    # Usuń rekordy z tabeli 'Car'
     cur.execute("""
         DELETE * FROM Car;
     """)
@@ -147,6 +186,12 @@ def delete_from_database_cars(conn_data):
 
 
 def delete_from_database_all(conn_data):
+    """
+    Usuwa wszystkie rekordy z tabeli 'Car' i 'Client' w bazie danych.
+
+    :param conn_data: Słownik zawierający dane połączenia z bazą (host, port, user, dbname, password).
+    :type conn_data: dict
+    """
     conn = psycopg.connect(
         host=conn_data['host'],
         port=conn_data['port'],
@@ -169,13 +214,14 @@ def delete_from_database_all(conn_data):
 
 def import_from_csv(csv_file_path, conn_data):
     """
-    Load data from remote csv file
+    Importuje dane z pliku CSV do bazy danych.
 
-    :param csv_file_path: Path to csv file.
-    :type csv_file_path: basestring
-    :param conn_data: Parsed json file with data needed to build connection string.
-    :type conn_data: any
+    :param csv_file_path: Ścieżka do pliku CSV.
+    :type csv_file_path: str
+    :param conn_data: Słownik zawierający dane połączenia z bazą (host, port, user, dbname, password).
+    :type conn_data: dict
     """
+    
     conn = psycopg.connect(
         host=conn_data['host'],
         port=conn_data['port'],
@@ -227,7 +273,3 @@ def import_from_csv(csv_file_path, conn_data):
         conn.close()
 
 
-with open('./db_creds_home.json') as f:
-    db_creds = simplejson.load(f)
-    initialize_car_service_db(db_creds)
-    import_from_csv('../app/dbAsCsv.csv', db_creds)
