@@ -69,11 +69,12 @@ def generate_random_data_client(conn_data):
     # Lista imion i nazwisk klientów
     names = ["Aleksander", "Kacper", "Patryk", "Bartosz", "Maciej"]
     surnames = ["Wiśniewski", "Wójcik", "Kowalczyk", "Kamiński", "Lewandowski"]
+    numbers = '1234567890'
 
     for _ in range(100):
         rand_name = random.choice(names)
         rand_surname = random.choice(surnames)
-        rand_pid = '12345678900'
+        rand_pid = radnom.choices(numbers, k = 11)
 
         # Wstaw dane do tabeli 'Client'
         cur.execute("""
